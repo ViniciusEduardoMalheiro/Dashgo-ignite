@@ -9,13 +9,12 @@ export function Input({name, label, ...rest }: InputProps) {
     return (
     
         <FormControl>
-       { !!label && <FormLabel htmlFor={name}>{label}l</FormLabel> } 
+       { !!label && <FormLabel htmlFor={name}>{label}</FormLabel> } 
         
         <ChakraInput 
         name={name}
         type="email"
-        id={name}
-        placeholder='Digite seu email'
+        id={name}    
         focusBorderColor='pink.500'
         bgColor='gray.900'
         variant='filled'
