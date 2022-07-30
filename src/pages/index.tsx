@@ -1,6 +1,7 @@
 import { Flex, Button, Stack } from '@chakra-ui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
- 
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Input } from './components/Form/Input'
 
 type SignInFormData = {
@@ -8,10 +9,17 @@ type SignInFormData = {
   password: string;
   resolve?: number;
 }
+
+const signFormSchema = yup.object().shape({
+  email: yup.string().required('E-mail obrigatório').email('E-mail invalido'),
+  password: yup.string().required('Senha obrigatória')
+})
  
 export default function Sign() {
 
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(signFormSchema)
+  })
 
   const { errors } = formState;
 
@@ -44,9 +52,9 @@ const handleSignIn: SubmitHandler<SignInFormData> =  async (values) => {
 
       <Stack spacing='4'>
 
-      <Input name='email' type='email' label='E-mail' error={errors.email} {...(register('email', { required: 'E-mail obrigatório'}))}/>
+      <Input name='email' type='email' label='E-mail' error={errors.email} ref={register} {...(register('email'))}/>
 
-       <Input name='password' type='password' label='Senha' error={errors.password} {...(register('password', { required: 'Senha Obrigatória' } ))} />
+       <Input name='password' type='password' label='Senha' error={errors.password} {...(register('password'))} />
 
       </Stack>  
 
@@ -54,7 +62,6 @@ const handleSignIn: SubmitHandler<SignInFormData> =  async (values) => {
         type='submit' 
         mt='6' 
         colorScheme='pink'
-        size='lg'
         isLoading={formState.isSubmitting}
         >
         Entrar
